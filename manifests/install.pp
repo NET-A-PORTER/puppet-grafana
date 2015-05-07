@@ -32,11 +32,18 @@ class grafana::install {
             ensure => present
           }
 
-          package { $::grafana::package_name:
-            ensure   => present,
-            provider => 'rpm',
-            source   => $::grafana::package_source,
-            require  => Package['fontconfig']
+          if $::grafana::package_provider ==  'rpm' {
+            package { $::grafana::package_name:
+              ensure   => present,
+              provider => 'rpm',
+              source   => $::grafana::package_source,
+              require  => Package['fontconfig']
+            }
+          } else {
+            package { $::grafana::package_name:
+              ensure   => $::grafana::version,
+              require  => Package['fontconfig']
+            }
           }
         }
         default: {

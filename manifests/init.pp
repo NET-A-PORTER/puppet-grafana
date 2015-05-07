@@ -68,6 +68,11 @@ class grafana (
   $install_dir      = $::grafana::params::install_dir,
   $install_method   = $::grafana::params::install_method,
   $package_name     = $::grafana::params::package_name,
+  $package_provider = $::osfamily ? {
+    'Debian'          => 'dpkg',
+    /(RedHat|Amazon)/ => 'rpm',
+    default           => undef,
+  },
   $package_source   = $::osfamily ? {
     'Debian'          => "https://grafanarel.s3.amazonaws.com/builds/grafana_${version}_amd64.deb",
     /(RedHat|Amazon)/ => "https://grafanarel.s3.amazonaws.com/builds/grafana-${version}-1.x86_64.rpm",
